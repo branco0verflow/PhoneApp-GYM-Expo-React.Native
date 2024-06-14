@@ -14,4 +14,4 @@ async function OpenDatabase(pathToDatabaseFile) {
   return SQLite.openDatabase('database.db');
 }
 
-export default OpenDatabase
+export default OpenDatabase;

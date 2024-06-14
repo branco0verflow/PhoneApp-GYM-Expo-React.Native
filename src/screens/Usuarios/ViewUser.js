@@ -8,11 +8,11 @@ import {
   View,
   Text,
 } from "react-native";
-import MyText from "../components/MyText";
-import MyInputText from "../components/MyInputText";
-import MySingleButton from "../components/MySingleButton";
+import MyText from "../../components/MyText";
+import MyInputText from "../../components/MyInputText";
+import MySingleButton from "../../components/MySingleButton";
 
-import databaseConection from "../database/database-manager";
+import databaseConection from "../../database/database-manager";
 const db = databaseConection.getConnection();
 
 const ViewUser = () => {
@@ -61,17 +61,22 @@ const ViewUser = () => {
             </KeyboardAvoidingView>
             <View style={styles.presenterView}>
                 <MyText
-                  text={`Username: ${userData == null ? "" : userData.userName}`}
+                  text={`Nombre: ${userData == null ? "" : userData.userName}`}
                   style={styles.presenterText}
                 />
                 <MyText
-                  text={`UserApellido: ${userData == null ? "" : userData.userApellido}`}
+                  text={`Apellido: ${userData == null ? "" : userData.userApellido}`}
                   style={styles.presenterText}
                 />
                 <MyText
-                  text={`Email: ${userData == null ? "" : userData.email}`}
+                  text={`Cédula: ${userData == null ? "" : userData.cedula}`}
                   style={styles.presenterText}
                 />
+                <MyText
+                  text={`Fecha: ${userData == null ? "" : userData.fechaNacimiento}`}
+                  style={styles.presenterText}
+                />
+
               </View>
           </ScrollView>
         </View>
@@ -99,18 +104,18 @@ const styles = StyleSheet.create({
   },
   inputStyle: {
     padding: 1,
-    margin: 1,
+    margin: 2,
     color: "black",
   },
   presenterView: {
-    // flex: 2,
+    flex: 2,
     marginLeft: 30,
     marginRight: 30,
     marginTop: 15,
     fontSize: 30,
-    height: 100,
+    height: 140,
     borderColor: "black",
-    borderRadius: 50,
+    borderRadius: 20,
     borderWidth: 1,
     padding: 20
   },

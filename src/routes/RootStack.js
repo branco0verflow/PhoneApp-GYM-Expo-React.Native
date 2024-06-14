@@ -5,24 +5,32 @@ import { NavigationContainer } from "@react-navigation/native";
 const Stack = createStackNavigator();
 
 // importo todas las pantallas
-import HomeScreen from "../screens/HomeScreen";
-import RegisterUser from "../screens/RegisterUser";
-import UpdateUser from "../screens/UpdateUser";
-import DeleteUser from "../screens/DeleteUser";
-import ViewUser from "../screens/ViewUser";
-import ViewAllUsers from "../screens/ViewAllUsers"
+import HomeScreen from "../screens/Usuarios/HomeScreen";
+import RegisterUser from "../screens/Usuarios/RegisterUser";
+import UpdateUser from "../screens/Usuarios/UpdateUser";
+import DeleteUser from "../screens/Usuarios/DeleteUser";
+import ViewUser from "../screens/Usuarios/ViewUser";
+import ViewAllUsers from "../screens/Usuarios/ViewAllUsers"
+import InicioPagina from "../screens/Inicio"
 
 const RootStack = () => {
     return (
         <>
         <NavigationContainer>
-             <Stack.Navigator initialRouteName="HomeScreen">
+             <Stack.Navigator initialRouteName="InicioPagina">
+
+            {/* Index */}
+            <Stack.Screen
+                name="InicioPagina"
+                component={InicioPagina}
+            />    
+
             {/* home */}
             <Stack.Screen
                 name="HomeScreen"
                 component={HomeScreen}
                 options={{
-                    title: "Home",
+                    title: "Administración de usuarios",
                     headerStyle: {
                         backgroundColor: "#f4511e",
                     },

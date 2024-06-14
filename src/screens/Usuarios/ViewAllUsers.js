@@ -7,9 +7,9 @@ import {
   View,
   Text,
 } from "react-native";
-import MyText from "../components/MyText";
+import MyText from "../../components/MyText";
 
-import databaseConection from "../database/database-manager";
+import databaseConection from "../../database/database-manager";
 const db = databaseConection.getConnection();
 
 const ViewAllUsers = () => {
@@ -51,8 +51,11 @@ const ViewAllUsers = () => {
         <MyText text="Apellido" style={styles.text} />
         <MyText text={item.userApellido} style={styles.text_data} />
 
-        <MyText text="Email" style={styles.text} />
-        <MyText text={item.email} style={styles.text_data} />
+        <MyText text="Cédula de identidad" style={styles.text} />
+        <MyText text={item.cedula} style={styles.text_data} />
+
+        <MyText text="Fecha de nacimiento" style={styles.text} />
+        <MyText text={item.fechaNacimiento} style={styles.text_data} />
       </View>
     );
   };

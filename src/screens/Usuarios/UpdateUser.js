@@ -1,25 +1,26 @@
 import { useState, useEffect } from "react"
-import {StyleSheet, View, SafeAreaView, ScrollView, KeyboardAvoidingView, Alert} from "react-native"
-import MySingleButton from "../components/MySingleButton"
-import MyInputText from "../components/MyInputText"
-import MyText from "../components/MyText"
+import { StyleSheet, View, SafeAreaView, ScrollView, KeyboardAvoidingView, Alert } from "react-native"
+import MySingleButton from "../../components/MySingleButton"
+import MyInputText from "../../components/MyInputText"
+import MyText from "../../components/MyText"
 
-import databaseConection from "../database/database-manager";
+import databaseConection from "../../database/database-manager";
 const db = databaseConection.getConnection();
 
-const UpdateUser = () => {
+const UpdateUser = ({ navigation }) => {
     // estado para busqueda 
     const [userNameSearch, setUserNameSearch] = useState("")
     // estado para el usuario a hacer update
     const [userName, setUsername] = useState("")
     const [userApellido, setUserApellido] = useState("")
-    const [userEmail, setUserEmail] = useState("")
+    const [cedula, setcedula] = useState("")
+    const [fechaNacimiento, setfechaNacimiento] = useState("")
 
     const updateUserDB = async () => {
         const readOnly = false;
         let result = null
         await db.transactionAsync(async (tx) => {
-            result = await databaseConection.updateUser(tx, userName, userApellido, userEmail);
+            result = await databaseConection.updateUser(tx, userName, userApellido, cedula, fechaNacimiento);
         }, readOnly);
         return result
     }
@@ -35,45 +36,64 @@ const UpdateUser = () => {
 
     // TODO funcion que busque al usuario
     const searchUser = async () => {
-        if(!userNameSearch.trim()) {
+        if (!userNameSearch.trim()) {
             Alert.alert("El nombre de usuario no puede estar vacio")
             return
         }
         //  llamar a funcion buscar
         const res = await searchDB()
-        if(res && res.rows && res.rows.length > 0) {
+        if (res && res.rows && res.rows.length > 0) {
             setUsername(res.rows[0].userName)
             setUserApellido(res.rows[0].userApellido)
-            setUserEmail(res.rows[0].email)
-        }else {
-            setUserEmail("")
+            setcedula(res.rows[0].cedula)
+            setfechaNacimiento(res.rows[0].fechaNacimiento)
+        } else {
+            setcedula("")
             setUserApellido("")
             setUsername("")
+            setfechaNacimiento("")
         }
     }
 
     // TODO funcion de hacer el update del usuario
     const updateUser = async () => {
-        if(!userName.trim()) {
+        if (!userName.trim()) {
             Alert.alert("El nombre de usuario no puede estar vacío")
             return
         }
 
-        if(!userApellido.trim()) {
+        if (!userApellido.trim()) {
             Alert.alert("El Apellido no puede estar vacío")
             return
         }
-        
-        if(!userEmail.trim()) {
-            Alert.alert("El email de usuario no puede estar vacío")
-            return 
+
+        if (!cedula.trim()) {
+            Alert.alert("La cédula de usuario no puede estar vacío")
+            return
+        }
+
+        if (!fechaNacimiento.trim()) {
+            Alert.alert("La fecha de nacimiento de usuario no puede estar vacío")
+            return
         }
         // update
         const res = await updateUserDB()
         console.log("res", res)
-        if(res.rowsAffected > 0) {
-            Alert.alert("Usuario actualizado correctamente")
-        }else {
+        if (res.rowsAffected > 0) {
+            Alert.alert(
+                "Exito",
+                "Usuario Actualizado!!",
+                [
+                  {
+                    text: "OK",
+                    onPress: () => navigation.navigate("HomeScreen"),
+                  },
+                ],
+                {
+                  cancelable: false,
+                }
+              );
+        } else {
             Alert.alert("No se pudo actualizar el usuario")
         }
     }
@@ -85,7 +105,7 @@ const UpdateUser = () => {
                         <KeyboardAvoidingView behavior="padding" style={styles.KeyboardAvoidingView}>
                             {/* Formulario */}
                             <MyText text="Buscar Usuario" style={styles.text} />
-                            <MyInputText 
+                            <MyInputText
                                 placeholder="Ingrese el nombre de Usuario"
                                 style={{}}
                                 onChangeText={(text) => setUserNameSearch(text)}
@@ -93,29 +113,35 @@ const UpdateUser = () => {
                             <MySingleButton title="Buscar" onPress={searchUser} />
 
                             <View style={styles.form}>
-                                <MyInputText 
+                                <MyInputText
                                     placeholder="Ingrese el nombre de usuario"
                                     defaultValue={userName}
                                     onChangeText={(text) => setUsername(text)}
                                 />
-                                <MyInputText 
+                                <MyInputText
                                     placeholder="Ingrese el apellido de usuario"
                                     defaultValue={userApellido}
                                     onChangeText={(text) => setUserApellido(text)}
                                 />
-                                <MyInputText 
-                                    placeholder="Ingrese el mail"
-                                    value={userEmail}
-                                    onChangeText={(text) => setUserEmail(text)}
+                                <MyInputText
+                                    placeholder="Ingrese nro cedula"
+                                    value={cedula}
+                                    onChangeText={(text) => setcedula(text)}
                                 />
 
-                                <MySingleButton 
-                                    title="Actualizar" 
-                                    onPress={updateUser} 
+                                <MyInputText
+                                    placeholder="Ingrese fecha de nacimiento"
+                                    value={fechaNacimiento}
+                                    onChangeText={(text) => setfechaNacimiento(text)}
+                                />
+
+                                <MySingleButton
+                                    title="Actualizar"
+                                    onPress={updateUser}
                                     style={styles.button}
-                                    />
+                                />
                             </View>
-                    
+
                         </KeyboardAvoidingView>
                     </ScrollView>
                 </View>
@@ -133,7 +159,7 @@ const styles = StyleSheet.create({
         backgroundColor: "white"
     },
     generalView: {
-        flex:1
+        flex: 1
     },
     text: {
         padding: 10,
@@ -145,11 +171,11 @@ const styles = StyleSheet.create({
         padding: 15
     },
     keyBoardView: {
-        flex:1,
+        flex: 1,
         justifyContent: "space-between"
     },
     form: {
-        flex:1,
+        flex: 1,
         marginTop: 25
     },
     button: {

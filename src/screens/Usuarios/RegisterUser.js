@@ -9,25 +9,25 @@ import {
   Text,
 } from "react-native";
 // importar inputs
-import MyInputText from "../components/MyInputText";
-import MySingleButton from "../components/MySingleButton";
+import MyInputText from "../../components/MyInputText";
+import MySingleButton from "../../components/MySingleButton";
 
-import databaseConection from "../database/database-manager";
+import databaseConection from "../../database/database-manager";
 const db = databaseConection.getConnection();
 
 const RegisterUser = ({ navigation }) => {
   // Definir los estados.
   const [userName, setuserName] = useState("");
   const [userApellido, setuserApellido] = useState("");
-  const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
+  const [cedula, setCedula] = useState("");
+  const [fechaNacimiento, setFechaNacimiento] = useState("");
 
   // funcion de borrar los estados
   const clearData = () => {
-    setEmail("");
-    setPassword("");
     setuserName("");
     setuserApellido("");
+    setCedula("");
+    setFechaNacimiento("");
   };
 
   // Validar datos
@@ -37,13 +37,13 @@ const RegisterUser = ({ navigation }) => {
       return false;
     }
 
-    if (!password.trim()) {
-      Alert.alert("Ingrese su contraseña");
+    if (!cedula.trim()) {
+      Alert.alert("Ingrese su cédula");
       return false;
     }
 
-    if (!email.trim() && email.indexOf("@") == -1) {
-      Alert.alert("Ingrese su email");
+    if (!fechaNacimiento.trim()) {
+      Alert.alert("Ingrese su fecha de nacimiento");
       return false;
     }
 
@@ -52,12 +52,12 @@ const RegisterUser = ({ navigation }) => {
 
   const saveUser = async () => {
     const readOnly = false;
-    let result = null
+    let result = null;
     await db.transactionAsync(async (tx) => {
-        result = await databaseConection.createUser(tx, userName, userApellido, email, password);
+        result = await databaseConection.createUser(tx, userName, userApellido, cedula, fechaNacimiento);
     }, readOnly);
 
-    return result
+    return result;
   };
 
   // funcion que se encargue de guardar los datos.
@@ -69,7 +69,7 @@ const RegisterUser = ({ navigation }) => {
         //  validar si se guardar los datos
         Alert.alert(
           "Exito",
-          "Usuario Registrados!!",
+          "Usuario Registrado!!",
           [
             {
               text: "OK",
@@ -80,8 +80,9 @@ const RegisterUser = ({ navigation }) => {
             cancelable: false,
           }
         );
+        clearData();
       } else {
-        Alert.alert("Error al registrar usuario")
+        Alert.alert("Error al registrar usuario");
       }
     }
   };
@@ -108,24 +109,22 @@ const RegisterUser = ({ navigation }) => {
                 value={userApellido}
               />
 
-              {/* contraseña */}
+              {/* cédula */}
               <MyInputText
-                placeholder="Contraseña"
-                onChangeText={setPassword}
-                maxLength={16}
-                secureTextEntry={true}
+                placeholder="Cédula"
+                onChangeText={setCedula}
                 style={styles.input}
-                value={password}
+                value={cedula}
               />
 
-              {/* correo */}
+              {/* fecha de nacimiento */}
               <MyInputText
-                placeholder="Correo Electronico"
-                keyboardType="email-address"
-                onChangeText={setEmail}
+                placeholder="Fecha de Nacimiento (YYYY-MM-DD)"
+                onChangeText={setFechaNacimiento}
                 style={styles.input}
-                value={email}
+                value={fechaNacimiento}
               />
+
               {/* button */}
               <MySingleButton onPress={registerUser} title={"Guardar"} />
             </KeyboardAvoidingView>

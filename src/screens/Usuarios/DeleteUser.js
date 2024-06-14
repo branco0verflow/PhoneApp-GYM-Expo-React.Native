@@ -1,13 +1,13 @@
 import { useState } from "react"
 import {StyleSheet, View, SafeAreaView, Alert,KeyboardAvoidingView, ScrollView, Text} from "react-native"
-import MyInputText from "../components/MyInputText"
-import MySingleButton from "../components/MySingleButton"
-import MyText from "../components/MyText"
+import MyInputText from "../../components/MyInputText"
+import MySingleButton from "../../components/MySingleButton"
+import MyText from "../../components/MyText"
 
-import databaseConection from "../database/database-manager";
+import databaseConection from "../../database/database-manager";
 const db = databaseConection.getConnection();
 
-const DeleteUser = () => {
+const DeleteUser = ({navigation}) => {
     const [userName, setUserName] = useState("")
 
     const deleteUserDB = async () => {
@@ -20,10 +20,22 @@ const DeleteUser = () => {
     }
 
     const deleteUser = async () => {
-        // TODO hacer funcionalidad de borrado
+        
         const res = await deleteUserDB()
         if(res.rowsAffected > 0) {
-            Alert.alert("Usuario eliminado")
+            Alert.alert(
+                "Exito",
+                "Usuario Eliminado!!",
+                [
+                  {
+                    text: "OK",
+                    onPress: () => navigation.navigate("HomeScreen"),
+                  },
+                ],
+                {
+                  cancelable: false,
+                }
+              );
         }else {
             Alert.alert("El usuario no existe")
         }
