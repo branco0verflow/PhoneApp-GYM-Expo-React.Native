@@ -7,18 +7,27 @@ import { LinearGradient } from "expo-linear-gradient";
 
 const db = databaseConection.getConnection();
 
-const HomeScreen = ({ navigation }) => {
+const HomeTipoMaquina = ({ navigation }) => {
   useEffect(() => {
     const init = async () => {
       const readOnly = false;
       await db.transactionAsync(async (tx) => {
         console.log("transaction", tx);
         const tableExist = await databaseConection.checkTableExist(tx);
-        console.log("table exists", tableExist.rows);
-        if (tableExist.rows.length) {
-          //await databaseConection.dropTable(tx)
+        console.log("User table exists:", tableExist.userTable.rows.length > 0);
+        console.log("TipoMaquina table exists:", tableExist.tipoMaquinaTable.rows.length > 0);
+
+        if (tableExist.userTable.rows.length > 0) {
+          console.log("User table exists");
+          // await databaseConection.dropTable(tx) // Uncomment this if you want to drop the table
         }
-        const result = await databaseConection.createUserTable(tx);
+
+        if (tableExist.tipoMaquinaTable.rows.length > 0) {
+          console.log("TipoMaquina table exists");
+          // await databaseConection.dropTable(tx) // Uncomment this if you want to drop the table
+        }
+
+        const result = await databaseConection.createTipoMaquinaTable(tx);
         console.log("### results ####", result);
       }, readOnly);
     };
@@ -44,8 +53,8 @@ const HomeScreen = ({ navigation }) => {
             <ScrollView style={styles.scollview}>
               {/* button add user*/}
               <MyButton
-                onPress={() => navigation.navigate("RegisterUser")}
-                title="Registro de Usuario"
+                onPress={() => navigation.navigate("RegisterTipoMaquina")}
+                title="Crear Tipos de Máquinas"
                 iconName="user-plus"
                 btnColor="blue"
               />
@@ -76,10 +85,8 @@ const HomeScreen = ({ navigation }) => {
 
               {/* button list user*/}
               <MyButton
-                onPress={() => navigation.navigate("ViewAllUsers")}
-                title="Ver todos los Usuario"
-                iconName="user-times"
-                btnColor="orange"
+                onPress={() => navigation.navigate("VerTodosTiposMaquina")}
+                title="Todos los Tipos de Máquinas"
               />
 
               {/* borrar db */}
@@ -131,4 +138,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeScreen;
+export default HomeTipoMaquina;

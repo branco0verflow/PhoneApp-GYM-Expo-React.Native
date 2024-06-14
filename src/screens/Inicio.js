@@ -14,6 +14,12 @@ const InicioPagina = () => {
       >
         <Text style={styles.buttonText}>Administrar usuarios</Text>
       </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate('HomeTipoMaquina')}
+      >
+        <Text style={styles.buttonText}>Administrar Tipo Máquina</Text>
+      </TouchableOpacity>
     </View>
   );
 };

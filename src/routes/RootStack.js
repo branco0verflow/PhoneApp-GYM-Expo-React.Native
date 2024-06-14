@@ -12,6 +12,9 @@ import DeleteUser from "../screens/Usuarios/DeleteUser";
 import ViewUser from "../screens/Usuarios/ViewUser";
 import ViewAllUsers from "../screens/Usuarios/ViewAllUsers"
 import InicioPagina from "../screens/Inicio"
+import HomeTipoMaquina from "../screens/TipoMaquina/HomeTipoMaquina";
+import RegisterTipoMaquina from "../screens/TipoMaquina/RegisterTipoMaquina";
+import VerTodosTiposMaquina from "../screens/TipoMaquina/VerTodosTiposMaquina";
 
 const RootStack = () => {
     return (
@@ -23,6 +26,63 @@ const RootStack = () => {
             <Stack.Screen
                 name="InicioPagina"
                 component={InicioPagina}
+                options={{
+                    title: "Página Principal",
+                    headerStyle: {
+                        backgroundColor: "#f4511e",
+                    },
+                    headerTintColor: "#fff",
+                    headerTitleStyle: {
+                        fontWeight: "bold"
+                    }
+                }}
+            /> 
+
+            {/* crear de Tipo M */}
+            <Stack.Screen
+                name="RegisterTipoMaquina"
+                component={RegisterTipoMaquina}
+                options={{
+                    title: "Crear tipos de máquinas",
+                    headerStyle: {
+                        backgroundColor: "#f4511e",
+                    },
+                    headerTintColor: "#fff",
+                    headerTitleStyle: {
+                        fontWeight: "bold"
+                    }
+                }}
+            />
+
+            {/* Ver TODOS Tipos M */}
+            <Stack.Screen
+                name="VerTodosTiposMaquina"
+                component={VerTodosTiposMaquina}
+                options={{
+                    title: "Ver todos los tipos de máquinas",
+                    headerStyle: {
+                        backgroundColor: "#f4511e",
+                    },
+                    headerTintColor: "#fff",
+                    headerTitleStyle: {
+                        fontWeight: "bold"
+                    }
+                }}
+            />
+
+            <Stack.Screen
+                name="HomeTipoMaquina"
+                component={HomeTipoMaquina}
+                options={{
+                    title: "Tipos de Máquinas",
+                    headerStyle: {
+                        backgroundColor: "#f4511e",
+                    },
+                    headerTintColor: "#fff",
+                    headerTitleStyle: {
+                        fontWeight: "bold"
+                    }
+                }}
             />    
 
             {/* home */}
