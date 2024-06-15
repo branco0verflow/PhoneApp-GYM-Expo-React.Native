@@ -7,7 +7,7 @@ const MyButton = ({ onPress, title, iconName, btnColor }) => {
   return (
     <TouchableOpacity onPress={onPress} style={styles.buttonContainer}>
       <LinearGradient
-        colors={['#ff8c00', '#ff0080']}
+        colors={['#660099', '#003399']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.button}

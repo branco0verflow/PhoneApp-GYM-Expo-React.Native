@@ -67,18 +67,18 @@ const databaseConection = {
         return res;
     },
 
-    async updateTipoMaquina(tx, id, NombreTM, imagenUrlTipoM) {
-        const res = await tx.executeSqlAsync("UPDATE TipoMaquina SET NombreTM = ?, imagenUrlTipoM = ? WHERE id = ?", [NombreTM, imagenUrlTipoM, id]);
+    async updateTipoMaquina(tx, NombreTM, imagenUrlTipoM) {
+        const res = await tx.executeSqlAsync("UPDATE TipoMaquina SET NombreTM = ?, imagenUrlTipoM = ? WHERE NombreTM = ?", [NombreTM, imagenUrlTipoM, NombreTM]);
         return res;
     },
 
-    async deleteTipoMaquina(tx, id) {
-        const res = await tx.executeSqlAsync("DELETE FROM TipoMaquina WHERE id = ?", [id]);
+    async deleteTipoMaquina(tx, NombreTM) {
+        const res = await tx.executeSqlAsync("DELETE FROM TipoMaquina WHERE NombreTM = ?", [NombreTM]);
         return res;
     },
 
-    async getOneTipoMaquina(tx, id) {
-        const res = await tx.executeSqlAsync("SELECT * FROM TipoMaquina WHERE id = ?", [id]);
+    async getOneTipoMaquina(tx, NombreTM) {
+        const res = await tx.executeSqlAsync("SELECT * FROM TipoMaquina WHERE NombreTM = ?", [NombreTM]);
         console.log("GET ONE TipoMaquina TIENE", res);
         return res;
     },

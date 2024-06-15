@@ -15,26 +15,35 @@ import MySingleButton from "../../components/MySingleButton";
 import databaseConection from "../../database/database-manager";
 const db = databaseConection.getConnection();
 
-const RegisterTipoMaquina = ({ navigation }) => {
+const RegisterMaquina = ({ navigation }) => {
   // Definir los estados.
-  const [NombreTM, setNombreTM] = useState("");
-  const [imagenUrlTipoM, setimagenUrlTipoM] = useState("");
+  const [userName, setuserName] = useState("");
+  const [userApellido, setuserApellido] = useState("");
+  const [cedula, setCedula] = useState("");
+  const [fechaNacimiento, setFechaNacimiento] = useState("");
 
   // funcion de borrar los estados
   const clearData = () => {
-    setNombreTM("");
-    setimagenUrlTipoM("");
+    setuserName("");
+    setuserApellido("");
+    setCedula("");
+    setFechaNacimiento("");
   };
 
   // Validar datos
   const validateData = () => {
-    if (!NombreTM.trim()) {
-      Alert.alert("Ingrese un nombre de Tipo");
+    if (!userName.trim()) {
+      Alert.alert("Ingrese su nombre de usuario");
       return false;
     }
 
-    if (!imagenUrlTipoM.trim()) {
-      Alert.alert("Ingrese URL de la imágen");
+    if (!cedula.trim()) {
+      Alert.alert("Ingrese su cédula");
+      return false;
+    }
+
+    if (!fechaNacimiento.trim()) {
+      Alert.alert("Ingrese su fecha de nacimiento");
       return false;
     }
 
@@ -45,14 +54,14 @@ const RegisterTipoMaquina = ({ navigation }) => {
     const readOnly = false;
     let result = null;
     await db.transactionAsync(async (tx) => {
-        result = await databaseConection.createTipoMaquina(tx, NombreTM, imagenUrlTipoM);
+        result = await databaseConection.createUser(tx, userName, userApellido, cedula, fechaNacimiento);
     }, readOnly);
 
     return result;
   };
 
   // funcion que se encargue de guardar los datos.
-  const registerTipoMaquina = async () => {
+  const registerUser = async () => {
     if (validateData()) {
       //guardar datos
       const result = await saveUser();
@@ -60,11 +69,11 @@ const RegisterTipoMaquina = ({ navigation }) => {
         //  validar si se guardar los datos
         Alert.alert(
           "Exito",
-          "Tipo de Maquina Registrada!!",
+          "Usuario Registrado!!",
           [
             {
               text: "OK",
-              onPress: () => navigation.navigate("HomeTipoMaquina"),
+              onPress: () => navigation.navigate("HomeScreen"),
             },
           ],
           {
@@ -73,7 +82,7 @@ const RegisterTipoMaquina = ({ navigation }) => {
         );
         clearData();
       } else {
-        Alert.alert("Error al registrar Tipo de Maquina");
+        Alert.alert("Error al registrar usuario");
       }
     }
   };
@@ -86,22 +95,38 @@ const RegisterTipoMaquina = ({ navigation }) => {
             <KeyboardAvoidingView style={styles.keyboard}>
               {/* inputs */}
               <MyInputText
-                placeholder="Nombre de tipo máquina"
-                onChangeText={setNombreTM}
+                placeholder="Nombre"
+                onChangeText={setuserName}
                 style={styles.input}
-                value={NombreTM}
+                value={userName}
               />
 
               {/* inputs */}
               <MyInputText
-                placeholder="Url de la imágen"
-                onChangeText={setimagenUrlTipoM}
+                placeholder="Apellido"
+                onChangeText={setuserApellido}
                 style={styles.input}
-                value={imagenUrlTipoM}
+                value={userApellido}
+              />
+
+              {/* cédula */}
+              <MyInputText
+                placeholder="Cédula"
+                onChangeText={setCedula}
+                style={styles.input}
+                value={cedula}
+              />
+
+              {/* fecha de nacimiento */}
+              <MyInputText
+                placeholder="Fecha de Nacimiento (YYYY-MM-DD)"
+                onChangeText={setFechaNacimiento}
+                style={styles.input}
+                value={fechaNacimiento}
               />
 
               {/* button */}
-              <MySingleButton onPress={registerTipoMaquina} title={"Guardar"} />
+              <MySingleButton onPress={registerUser} title={"Guardar"} />
             </KeyboardAvoidingView>
           </ScrollView>
         </View>
@@ -132,4 +157,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RegisterTipoMaquina;
+export default RegisterMaquina;

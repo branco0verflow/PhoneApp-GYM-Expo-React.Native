@@ -2,12 +2,11 @@ import { useEffect } from "react";
 import { SafeAreaView, View, StyleSheet, ScrollView } from "react-native";
 import MyButton from "../../components/MyButton";
 import databaseConection from "../../database/database-manager";
-import OpenDatabase from "../../database/import-database";
 import { LinearGradient } from "expo-linear-gradient";
 
 const db = databaseConection.getConnection();
 
-const HomeTipoMaquina = ({ navigation }) => {
+const HomeMaquina = ({ navigation }) => {
   useEffect(() => {
     const init = async () => {
       const readOnly = false;
@@ -19,12 +18,12 @@ const HomeTipoMaquina = ({ navigation }) => {
 
         if (tableExist.userTable.rows.length > 0) {
           console.log("User table exists");
-          // await databaseConection.dropTable(tx) // Uncomment this if you want to drop the table
+          // await databaseConection.dropTable(tx) 
         }
 
         if (tableExist.tipoMaquinaTable.rows.length > 0) {
           console.log("TipoMaquina table exists");
-          // await databaseConection.dropTable(tx) // Uncomment this if you want to drop the table
+          // await databaseConection.dropTable(tx) 
         }
 
         const result = await databaseConection.createTipoMaquinaTable(tx);
@@ -54,7 +53,7 @@ const HomeTipoMaquina = ({ navigation }) => {
               {/* crear*/}
               <MyButton
                 onPress={() => navigation.navigate("RegisterTipoMaquina")}
-                title="Crear Tipos de Máquinas"
+                title="Crear Máquinas"
                 iconName="user-plus"
                 btnColor="blue"
               />
@@ -62,7 +61,7 @@ const HomeTipoMaquina = ({ navigation }) => {
               {/* Modificar */}
               <MyButton
                 onPress={() => navigation.navigate("ModificarTipoMaquina")}
-                title="Modificar Tipos de Máquinas"
+                title="Modificar Máquinas"
                 iconName="user-circle"
                 btnColor="green"
               />
@@ -70,23 +69,15 @@ const HomeTipoMaquina = ({ navigation }) => {
               {/* Elimiar */}
               <MyButton
                 onPress={() => navigation.navigate("EliminarTipoM")}
-                title="Borrar Tipos"
+                title="Borrar Máquinas"
                 iconName="user-times"
                 btnColor="brown"
-              />
-
-              {/* button user */}
-              <MyButton
-                onPress={() => navigation.navigate("VerTipoMaquina")}
-                title="Ver Tipo"
-                iconName="user-times"
-                btnColor="purple"
               />
 
               {/* Ver Todos */}
               <MyButton
                 onPress={() => navigation.navigate("VerTodosTiposMaquina")}
-                title="Todos los Tipos de Máquinas"
+                title="Todos las Máquinas"
               />
 
               
@@ -124,4 +115,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeTipoMaquina;
+export default HomeMaquina;

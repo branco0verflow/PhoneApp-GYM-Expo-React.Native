@@ -15,6 +15,9 @@ import InicioPagina from "../screens/Inicio"
 import HomeTipoMaquina from "../screens/TipoMaquina/HomeTipoMaquina";
 import RegisterTipoMaquina from "../screens/TipoMaquina/RegisterTipoMaquina";
 import VerTodosTiposMaquina from "../screens/TipoMaquina/VerTodosTiposMaquina";
+import VerTipoMaquina from "../screens/TipoMaquina/VerTipoMaquina";
+import ModificarTipoMaquina from "../screens/TipoMaquina/ModificarTipoMaquina";
+import EliminarTipoM from "../screens/TipoMaquina/EliminarTipoM";
 
 const RootStack = () => {
     return (
@@ -29,7 +32,7 @@ const RootStack = () => {
                 options={{
                     title: "Página Principal",
                     headerStyle: {
-                        backgroundColor: "#f4511e",
+                        backgroundColor: "#A93226",
                     },
                     headerTintColor: "#fff",
                     headerTitleStyle: {
@@ -60,6 +63,54 @@ const RootStack = () => {
                 component={VerTodosTiposMaquina}
                 options={{
                     title: "Ver todos los tipos de máquinas",
+                    headerStyle: {
+                        backgroundColor: "#f4511e",
+                    },
+                    headerTintColor: "#fff",
+                    headerTitleStyle: {
+                        fontWeight: "bold"
+                    }
+                }}
+            />
+
+            {/* Ver TODOS Tipos M */}
+            <Stack.Screen
+                name="ModificarTipoMaquina"
+                component={ModificarTipoMaquina}
+                options={{
+                    title: "Modificar los tipos de máquinas",
+                    headerStyle: {
+                        backgroundColor: "#f4511e",
+                    },
+                    headerTintColor: "#fff",
+                    headerTitleStyle: {
+                        fontWeight: "bold"
+                    }
+                }}
+            />
+
+            {/* Ver UN Tipo M segun nombre */}
+            <Stack.Screen
+                name="VerTipoMaquina"
+                component={VerTipoMaquina}
+                options={{
+                    title: "Modificar los tipos de máquinas",
+                    headerStyle: {
+                        backgroundColor: "#f4511e",
+                    },
+                    headerTintColor: "#fff",
+                    headerTitleStyle: {
+                        fontWeight: "bold"
+                    }
+                }}
+            />
+
+            {/* Eliminar Tipo M */}
+            <Stack.Screen
+                name="EliminarTipoM"
+                component={EliminarTipoM}
+                options={{
+                    title: "Eliminar tipos de máquinas",
                     headerStyle: {
                         backgroundColor: "#f4511e",
                     },
