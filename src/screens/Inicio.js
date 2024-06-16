@@ -30,7 +30,7 @@ const InicioPagina = () => {
         />
         
         <MyButton
-          onPress={() => navigation.navigate('HomeTipoMaquina')}
+          onPress={() => navigation.navigate('HomeMaquina')}
           title="Máquinas"
           iconName="fitness"
           btnColor={['#ff8c00', '#ff0080']}

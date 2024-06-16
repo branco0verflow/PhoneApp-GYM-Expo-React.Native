@@ -30,6 +30,8 @@ const HomeScreen = ({ navigation }) => {
     const readOnly = false;
     await db.transactionAsync(async (tx) => {
       databaseConection.deleteAllUser(tx);
+      databaseConection.deleteAllMaquina(tx);
+      databaseConection.deleteAllTipoMaquina(tx);
     }, readOnly);
   };
 

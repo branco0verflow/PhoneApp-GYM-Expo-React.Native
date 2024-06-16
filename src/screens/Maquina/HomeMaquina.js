@@ -13,20 +13,15 @@ const HomeMaquina = ({ navigation }) => {
       await db.transactionAsync(async (tx) => {
         console.log("transaction", tx);
         const tableExist = await databaseConection.checkTableExist(tx);
-        console.log("User table exists:", tableExist.userTable.rows.length > 0);
-        console.log("TipoMaquina table exists:", tableExist.tipoMaquinaTable.rows.length > 0);
+        console.log("Tipo Maquina table exists:", tableExist.tipoMaquinaTable.rows.length > 0);
+        console.log("Maquina table exists:", tableExist.MaquinaTable.rows.length > 0);
 
-        if (tableExist.userTable.rows.length > 0) {
-          console.log("User table exists");
-          // await databaseConection.dropTable(tx) 
-        }
-
-        if (tableExist.tipoMaquinaTable.rows.length > 0) {
+        if (tableExist.MaquinaTable.rows.length > 0) {
           console.log("TipoMaquina table exists");
           // await databaseConection.dropTable(tx) 
         }
 
-        const result = await databaseConection.createTipoMaquinaTable(tx);
+        const result = await databaseConection.createMaquinaTable(tx);
         console.log("### results ####", result);
       }, readOnly);
     };
@@ -52,7 +47,7 @@ const HomeMaquina = ({ navigation }) => {
             <ScrollView style={styles.scollview}>
               {/* crear*/}
               <MyButton
-                onPress={() => navigation.navigate("RegisterTipoMaquina")}
+                onPress={() => navigation.navigate("RegisterMaquina")}
                 title="Crear Máquinas"
                 iconName="user-plus"
                 btnColor="blue"
@@ -76,7 +71,7 @@ const HomeMaquina = ({ navigation }) => {
 
               {/* Ver Todos */}
               <MyButton
-                onPress={() => navigation.navigate("VerTodosTiposMaquina")}
+                onPress={() => navigation.navigate("VerTodasMaquinas")}
                 title="Todos las Máquinas"
               />
 

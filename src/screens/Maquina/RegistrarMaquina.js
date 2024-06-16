@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   SafeAreaView,
@@ -6,74 +6,94 @@ import {
   KeyboardAvoidingView,
   Alert,
   View,
-  Text,
+  Text
 } from "react-native";
-// importar inputs
-import MyInputText from "../../components/MyInputText";
 import MySingleButton from "../../components/MySingleButton";
-
+import RNPickerSelect from "react-native-picker-select";
 import databaseConection from "../../database/database-manager";
+
 const db = databaseConection.getConnection();
 
 const RegisterMaquina = ({ navigation }) => {
   // Definir los estados.
-  const [userName, setuserName] = useState("");
-  const [userApellido, setuserApellido] = useState("");
-  const [cedula, setCedula] = useState("");
-  const [fechaNacimiento, setFechaNacimiento] = useState("");
+  const [tipoTM, setTipoTM] = useState("");
+  const [nroSala, setNroSala] = useState("");
+  const [tipoMaquinas, setTipoMaquinas] = useState([]);
 
-  // funcion de borrar los estados
+  useEffect(() => {
+    fetchTipoMaquinas();
+  }, []);
+
+  // Función para obtener los tipos de máquina de la base de datos
+  const fetchTipoMaquinas = async () => {
+    try {
+      const readOnly = true;
+      let result = null;
+      await db.transactionAsync(async (tx) => {
+        result = await databaseConection.getAllTipoMaquina(tx);
+        console.log("ESTE ES EL GET ALL", result);
+      }, readOnly);
+
+      if (result && result.rows) {
+        const fetchedTipoMaquinas = result.rows.map((item) => ({
+          label: item.NombreTM,
+          value: item.id, // asumiendo que quieres usar 'id' como value
+        }));
+        setTipoMaquinas(fetchedTipoMaquinas);
+      } else {
+        console.log("No se encontraron tipos de máquina.");
+      }
+    } catch (error) {
+      console.error("Error al obtener tipos de máquina: ", error);
+    }
+  };
+
+  // Función de borrar los estados
   const clearData = () => {
-    setuserName("");
-    setuserApellido("");
-    setCedula("");
-    setFechaNacimiento("");
+    setTipoTM("");
+    setNroSala("");
   };
 
   // Validar datos
   const validateData = () => {
-    if (!userName.trim()) {
-      Alert.alert("Ingrese su nombre de usuario");
+    if (!tipoTM) {
+      Alert.alert("Seleccione el tipo de máquina");
       return false;
     }
 
-    if (!cedula.trim()) {
-      Alert.alert("Ingrese su cédula");
-      return false;
-    }
-
-    if (!fechaNacimiento.trim()) {
-      Alert.alert("Ingrese su fecha de nacimiento");
+    if (!nroSala) {
+      Alert.alert("Seleccione el número de sala");
       return false;
     }
 
     return true;
   };
 
-  const saveUser = async () => {
+  const saveMaquina = async () => {
     const readOnly = false;
     let result = null;
+
     await db.transactionAsync(async (tx) => {
-        result = await databaseConection.createUser(tx, userName, userApellido, cedula, fechaNacimiento);
+      result = await databaseConection.createMaquina(tx, tipoTM, nroSala);
     }, readOnly);
 
     return result;
   };
 
-  // funcion que se encargue de guardar los datos.
-  const registerUser = async () => {
+  // Función que se encargue de guardar los datos.
+  const registerMaquina = async () => {
     if (validateData()) {
-      //guardar datos
-      const result = await saveUser();
+      // Guardar datos
+      const result = await saveMaquina();
       if (result.rowsAffected > 0) {
-        //  validar si se guardar los datos
+        // Validar si se guardan los datos
         Alert.alert(
-          "Exito",
-          "Usuario Registrado!!",
+          "Éxito",
+          "Máquina Registrada!!",
           [
             {
               text: "OK",
-              onPress: () => navigation.navigate("HomeScreen"),
+              onPress: () => navigation.navigate("HomeMaquina"),
             },
           ],
           {
@@ -82,7 +102,7 @@ const RegisterMaquina = ({ navigation }) => {
         );
         clearData();
       } else {
-        Alert.alert("Error al registrar usuario");
+        Alert.alert("Error al registrar la Máquina");
       }
     }
   };
@@ -93,40 +113,45 @@ const RegisterMaquina = ({ navigation }) => {
         <View style={styles.generalView}>
           <ScrollView>
             <KeyboardAvoidingView style={styles.keyboard}>
-              {/* inputs */}
-              <MyInputText
-                placeholder="Nombre"
-                onChangeText={setuserName}
-                style={styles.input}
-                value={userName}
+              {/* Dropdown para Tipo de Máquina */}
+              <Text style={styles.label}>Tipo de Máquina:</Text>
+              <RNPickerSelect
+                onValueChange={(value) => setTipoTM(value)}
+                items={tipoMaquinas}
+                placeholder={{
+                  label: "Seleccione el tipo de máquina",
+                  value: null,
+                }}
+                style={pickerSelectStyles}
+                value={tipoTM}
               />
 
-              {/* inputs */}
-              <MyInputText
-                placeholder="Apellido"
-                onChangeText={setuserApellido}
-                style={styles.input}
-                value={userApellido}
+              {/* Dropdown para Número de Sala */}
+              <Text style={styles.label}>Número de Sala:</Text>
+              <RNPickerSelect
+                onValueChange={(value) => setNroSala(value)}
+                items={[
+                  { label: "1", value: 1 },
+                  { label: "2", value: 2 },
+                  { label: "3", value: 3 },
+                  { label: "4", value: 4 },
+                  { label: "5", value: 5 },
+                  { label: "6", value: 6 },
+                  { label: "7", value: 7 },
+                  { label: "8", value: 8 },
+                  { label: "9", value: 9 },
+                  { label: "10", value: 10 },
+                ]}
+                placeholder={{
+                  label: "Seleccione el número de sala",
+                  value: null,
+                }}
+                style={pickerSelectStyles}
+                value={nroSala}
               />
 
-              {/* cédula */}
-              <MyInputText
-                placeholder="Cédula"
-                onChangeText={setCedula}
-                style={styles.input}
-                value={cedula}
-              />
-
-              {/* fecha de nacimiento */}
-              <MyInputText
-                placeholder="Fecha de Nacimiento (YYYY-MM-DD)"
-                onChangeText={setFechaNacimiento}
-                style={styles.input}
-                value={fechaNacimiento}
-              />
-
-              {/* button */}
-              <MySingleButton onPress={registerUser} title={"Guardar"} />
+              {/* Botón */}
+              <MySingleButton onPress={registerMaquina} title={"Guardar"} />
             </KeyboardAvoidingView>
           </ScrollView>
         </View>
@@ -151,9 +176,39 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "space-between",
   },
-  input: {
-    padding: 15,
-    textAlignVertical: "top",
+  label: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginTop: 15,
+    marginBottom: 5,
+    marginLeft: 10,
+  },
+});
+
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    fontSize: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderRadius: 4,
+    color: 'black',
+    paddingRight: 30,
+    marginLeft: 10,
+    marginRight: 10,
+  },
+  inputAndroid: {
+    fontSize: 16,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderWidth: 0.5,
+    borderColor: 'gray',
+    borderRadius: 8,
+    color: 'black',
+    paddingRight: 30,
+    marginLeft: 10,
+    marginRight: 10,
   },
 });
 

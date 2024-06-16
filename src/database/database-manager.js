@@ -10,13 +10,15 @@ const databaseConection = {
     async checkTableExist(tx) {
         const userTable = await tx.executeSqlAsync("SELECT name FROM sqlite_master WHERE type='table' AND name='users'", []);
         const tipoMaquinaTable = await tx.executeSqlAsync("SELECT name FROM sqlite_master WHERE type='table' AND name='TipoMaquina'", []);
-        return { userTable, tipoMaquinaTable };
+        const MaquinaTable = await tx.executeSqlAsync("SELECT name FROM sqlite_master WHERE type='table' AND name='Maquina'", []);
+        return { userTable, tipoMaquinaTable, MaquinaTable };
     },
 
     async dropTable(tx) {
         const dropUsers = await tx.executeSqlAsync("DROP TABLE IF EXISTS users", []);
         const dropTipoMaquina = await tx.executeSqlAsync("DROP TABLE IF EXISTS TipoMaquina", []);
-        return { dropUsers, dropTipoMaquina };
+        const dropMaquina = await tx.executeSqlAsync("DROP TABLE IF EXISTS TipoMaquina", []);
+        return { dropUsers, dropTipoMaquina, dropMaquina };
     },
 
     async createUserTable(tx) {
@@ -25,7 +27,12 @@ const databaseConection = {
     },
 
     async createTipoMaquinaTable(tx) {
-        const res = await tx.executeSqlAsync("CREATE TABLE IF NOT EXISTS TipoMaquina(id INTEGER PRIMARY KEY AUTOINCREMENT, NombreTM VARCHAR(50), imagenUrlTipoM VARCHAR(100))", []);
+        const res = await tx.executeSqlAsync("CREATE TABLE IF NOT EXISTS TipoMaquina(tipo_Mid INTEGER PRIMARY KEY AUTOINCREMENT, NombreTM VARCHAR(50), imagenUrlTipoM VARCHAR(100))", []);
+        return res;
+    },
+
+    async createMaquinaTable(tx) {
+        const res = await tx.executeSqlAsync("CREATE TABLE IF NOT EXISTS Maquina(maquina_id INTEGER PRIMARY KEY AUTOINCREMENT, tipo_Mid INTEGER, nro_sala VARCHAR(3), FOREIGN KEY(tipo_Mid) REFERENCES TipoMaquina(tipo_Mid))", []);
         return res;
     },
 
@@ -91,8 +98,39 @@ const databaseConection = {
     async deleteAllTipoMaquina(tx) {
         const res = await tx.executeSqlAsync("DELETE FROM TipoMaquina", []);
         return res;
+    },
+
+    async createMaquina(tx, tipo_Mid, nro_sala) {
+        const res = await tx.executeSqlAsync("INSERT INTO Maquina (tipo_Mid, nro_sala) VALUES (?, ?)", [tipo_Mid, nro_sala]);
+        console.log("Funciona (Insert correcto)", res);
+        return res;
+    },
+
+    async updateMaquina(tx, maquina_id, tipo_Mid, nro_sala) {
+        const res = await tx.executeSqlAsync("UPDATE Maquina SET tipo_Mid = ?, nro_sala = ? WHERE maquina_id = ?", [tipo_Mid, nro_sala, maquina_id]);
+        return res;
+    },
+
+    async deleteMaquina(tx, maquina_id) {
+        const res = await tx.executeSqlAsync("DELETE FROM Maquina WHERE maquina_id = ?", [maquina_id]);
+        return res;
+    },
+
+    async getOneMaquina(tx, maquina_id) {
+        const res = await tx.executeSqlAsync("SELECT * FROM Maquina WHERE maquina_id = ?", [maquina_id]);
+        console.log("GET ONE MAQUINA TIENE", res);
+        return res;
+    },
+
+    async getAllMaquina(tx) {
+        const res = await tx.executeSqlAsync("SELECT * FROM Maquina", []);
+        return res;
+    },
+
+    async deleteAllMaquina(tx) {
+        const res = await tx.executeSqlAsync("DELETE FROM Maquina", []);
+        return res;
     }
 };
 
-export default databaseConection
-
+export default databaseConection;
